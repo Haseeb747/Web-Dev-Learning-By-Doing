@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Game</title>
+<link rel="stylesheet" href="CatchTheBall_style.css">
+</head>
+<body>
+    <h1>
+        Catch the Balls Man
+    </h1>
+    <div class="container">
+    <div id="outerDiv">
+        <div id="glass"></div>
+    </div>
+    <div id="scoreBox">
+
+        Score:
+
+    </div>
+    </div>
+    <div id="buttons-container">
+    <button class="buttonsClass" onclick="goLeft()">
+        Left
+    </button>
+    <button class="buttonsClass" onclick="goRight()">
+        Right
+    </button>
+    <button class="buttonsClass" onclick="createBalls()">
+        Start
+    </button>
+    <button class="buttonsClass" onclick="stopBalls()">
+        Stop
+    </button>
+</div>
+    <script>
+        var createInterval = false;
+        var createIntervalId;
+        var intervalStarted = false;
+        var intervalId;
+        var score = 10;
+
+        document.addEventListener("keydown", (ev) => {
+            if(ev.key == "ArrowRight"){
+                goRight();
+            }
+            if(ev.key == "ArrowLeft"){
+                goLeft();
+            }
+        })
+        function letsSee(){
+            var outerDiv = document.getElementById('outerDiv');
+            var outerDivHeight = outerDiv.clientHeight;
+            var glass = document.getElementById('glass');
+            let topPosition = parseInt(window.getComputedStyle(glass).getPropertyValue('top'));
+            alert(topPosition+"  | Div : "+ outerDivHeight + " diff  "+ (outerDivHeight-50));
+            glass.style.top = '346px';
+        }
+        function goLeft(){
+            var glass = document.getElementById('glass');
+            glass.style.left = getAndSetPropertyforLeft();
+ 
+        }
+        function goRight(){
+            var glass = document.getElementById('glass');
+            glass.style.left = getAndSetPropertyforRight();
+        }
+        function getAndSetPropertyforLeft(){
+            var glass = document.getElementById('glass');
+            var str = window.getComputedStyle(glass, null).getPropertyValue('left');
+            // Convert the remaining part to a number
+            let numberValue = (parseInt(str.slice(0, -2), 10) - 15);
+            let val = ''
+            if(numberValue >= -15){            
+                val = numberValue + 'px';
+            }
+            else{
+                val = '-15px';
+            }
+            return val;
+        }
+        function getAndSetPropertyforRight(){
+            var glass = document.getElementById('glass');
+            var str = window.getComputedStyle(glass, null).getPropertyValue('left');
+            // Convert the remaining part to a number
+            let numberValue = (parseInt(str.slice(0, -2), 10) + 15);
+           
+            let val = ''
+            if(numberValue <= 405){            
+                val = numberValue + 'px';
+            }
+            else{
+                val = '405px';
+            }
+            return val;
+        }
+        function createBalls(){
+            if(!createInterval){
+                createInterval = true;
+                createIntervalId = setInterval(function() {
+                    var cont = document.getElementById('outerDiv');
+            var newBall = document.createElement('div');
+            newBall.className = "balls";
+            var num = Math.floor(Math.random() * 380);    // Creating a ramdom number from 0 to 381
+          //  alert(num);
+            var str = num+'px';
+          //  alert(str);
+            // Set the styles for the ball
+            newBall.style.width = '50px'; // Adjust the size as needed
+            newBall.style.height = '50px'; // Adjust the size as needed
+            newBall.style.position = 'absolute';
+            newBall.style.left = str;
+            newBall.style.borderRadius = '50%';
+            newBall.style.backgroundColor = 'lawngreen';
+            newBall.animate = 'move 1.5s forwards';
+            newBall.counted = true; // New property to track if the ball has been counted for score
+            
+            cont.appendChild(newBall);
+            //document.body.insert(newBall);
+                }, 4000);
+            }
+
+            if (!intervalStarted) {
+                intervalStarted = true;
+                intervalId = setInterval(function() {
+                    var outerDiv = document.getElementById('outerDiv');
+                    var outerDivHeight = outerDiv.clientHeight;
+                    
+                    var Balls = document.getElementsByClassName('balls');
+                    for (let i = 0; i < Balls.length; i++) {
+                        let ball = Balls[i];
+                        let topPosition = parseInt(window.getComputedStyle(ball).getPropertyValue('top'));
+                        let leftPosition = parseInt(window.getComputedStyle(ball).getPropertyValue('left'));
+                        if (topPosition >= outerDivHeight - 50) { // Check if ball has reached the bottom
+                            // check if the ball is in glass
+                            ball.style.transition = 'opacity 1s'; // Add a fading animation
+                            ball.style.opacity = '0'; // Fade out the ball
+                            setTimeout(() => ball.remove(), 1000); // Remove the ball after the fade out
+                            checkBallandGlass(leftPosition, ball);
+                        } else {
+                            ball.style.top = (topPosition + 5) + 'px'; // Move the ball down by 5px
+                        }
+                    }
+                }, 50);
+        }
+        }
+        function stopBalls(){
+            clearInterval(createIntervalId);
+            createInterval = false;
+            //clearInterval(intervalId);
+        }
+        function checkBallandGlass(x, y){
+            console.log("Inside checkBallandGlass");
+            if(y.counted){
+                y.counted = false;
+                var leftPositionOfBall = x;
+                var glass = document.getElementById('glass');
+                let leftPosition = parseInt(window.getComputedStyle(glass).getPropertyValue('left'));
+                var diff = leftPositionOfBall-leftPosition;
+            // alert(leftPositionOfBall+"   ||    "+leftPosition+"   -   "+ diff);
+                if(diff < 60 && diff > -15){
+                //alert(leftPositionOfBall+"   ||    "+leftPosition+"   -   "+ diff);
+                    console.log("Score: "+score);
+                //   alert("SC: "+ scoreCounter);
+                    document.getElementById("scoreBox").innerHTML = "Score: "+ score;
+                    score = score + 10;
+                    
+                }
+        }
+            
+        }
+          
+    
+    </script>
+</body>
+
+</html>

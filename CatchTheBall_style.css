@@ -1,0 +1,65 @@
+
+body {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+}
+h1 {
+
+    text-align: center;
+
+}
+.container {
+
+    display: flex;
+
+    align-items: center; /* Vertically centers the items */
+
+}
+#outerDiv{
+    height: 450px;
+    width: 500px;
+    background-color: bisque;
+    position: relative;
+    
+    overflow: hidden; /* Ensure the balls don't cause the page to scroll */
+  
+}
+
+#glass {
+    height: 40px;
+    width: 40px;
+    border-left: 3px solid green;
+    border-right: 3px solid green;
+    border-bottom: 3px solid green;
+    padding: 20px;
+    margin: 20px;
+    position: absolute;
+    top: 346px;
+    left: 200px;
+    
+}
+#scoreBox{
+    position: relative;
+    float: left;
+    background-color: aqua;
+    height: 30px;
+    width: 100px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: blueviolet;
+    margin-left: 20px; /* Add some spacing between outerDiv and scoreBox */
+}
+#buttons-container{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.buttonsClass { 
+    margin: 10px;
+    align-items: normal;
+}
